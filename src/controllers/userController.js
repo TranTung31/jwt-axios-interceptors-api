@@ -1,6 +1,10 @@
 import { StatusCodes } from 'http-status-codes'
 import ms from 'ms'
-import { JwtProvider } from '~/providers/JwtProvider'
+import {
+  JwtProvider,
+  ACCESS_TOKEN_SECRET_SIGNATURE,
+  REFRESH_TOKEN_SECRET_SIGNATURE
+} from '~/providers/JwtProvider'
 
 /**
  * Mock nhanh thông tin user thay vì phải tạo Database rồi query.
@@ -12,14 +16,6 @@ const MOCK_DATABASE = {
     PASSWORD: 'trantungdev@3105'
   }
 }
-
-/**
- * 2 cái chữ ký bí mật quan trọng trong dự án. Dành cho JWT - Jsonwebtokens
- * Lưu ý phải lưu vào biến môi trường ENV trong thực tế cho bảo mật.
- * Ở đây mình làm Demo thôi nên mới đặt biến const và giá trị random ngẫu nhiên trong code nhé.
- */
-const ACCESS_TOKEN_SECRET_SIGNATURE = 'KBgJwUETt4HeVD05WaXXI9V3JnwCVP'
-const REFRESH_TOKEN_SECRET_SIGNATURE = 'fcCjhnpeopVn2Hg1jG75MUi62051yL'
 
 const login = async (req, res) => {
   try {
@@ -34,7 +30,7 @@ const login = async (req, res) => {
       email: MOCK_DATABASE.USER.EMAIL
     }
 
-    const accessToken = await JwtProvider.generateToken(userInfo, ACCESS_TOKEN_SECRET_SIGNATURE, '1h')
+    const accessToken = await JwtProvider.generateToken(userInfo, ACCESS_TOKEN_SECRET_SIGNATURE, '5s')
 
     const refreshToken = await JwtProvider.generateToken(userInfo, REFRESH_TOKEN_SECRET_SIGNATURE, '14 days')
 
